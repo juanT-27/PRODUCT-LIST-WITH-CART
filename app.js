@@ -9,61 +9,84 @@ class Cart {
     console.log(this.__cartList);
   }
 
-
-  findProductIndex(product, arr) {
-    return arr.findIndex((el) => el.name === product);
+  findProductIndex(prodId, arr) {
+    return arr.findIndex((el) => el.name === prodId);
   }
 
-  multiplyValues(price, units){
-    return price*units
+  multiplyValues(price, units) {
+    return price * units;
   }
 
-  manageProductUnits (indx){
+  deleteProduct(indx) {
+    this.__cartList.splice(indx, 1);
+    this.cartList;
+    this.displayProducts()
+  }
+
+  manageProductUnits(indx, action) {
     let element = this.__cartList[indx];
-    element.units += 1;
-    element.totalPrice= this.multiplyValues(element.price, element.units);
-    this.cartList
+    action === "plusOne" ? (element.units += 1) : (element.units -= 1);
+    element.totalPrice = this.multiplyValues(element.price, element.units);
+    if (element.units === 0) this.deleteProduct();
+    this.cartList;
+    this.displayProducts();
+    return element;
   }
 
-  handleAddOrRestClicked(prodId, objClicked){
-    console.log(prodId)
+  handleAddOrRestClicked(prodId, objClicked) {
+    let prodIndx = this.findProductIndex(prodId, this.__cartList);
+    this.manageProductUnits(prodIndx, objClicked);
+    console.log(product);
   }
 
-  createProductCard(product){
-    let template= document.importNode(this.cartTemplate, true).content
-    template.querySelector("#title").textContent= product.name
-    template.querySelector("#units").textContent= product.units
-    template.querySelector("#productPrice").textContent= `$${product.price}`
-    template.querySelector("#totalPrice").textContent= `*${product.units} $${product.totalPrice}`
-    let addBtn= template.querySelector("#plusOne")
-    let restBtn= template.querySelector("#minuOne")
-    addBtn.setAttribute("productId", product.name)
-    restBtn.setAttribute("productId", product.name)
-    return template
+  createProductCard(product) {
+    let template = document.importNode(this.cartTemplate, true).content;
+    template.querySelector("#title").textContent = product.name;
+    template.querySelector("#units").textContent = product.units;
+    template.querySelector(
+      "#productPrice"
+    ).textContent = `$${product.price.toFixed(2)}`;
+    template.querySelector("#totalPrice").textContent = `*${
+      product.units
+    } $${product.totalPrice.toFixed(2)}`;
+    let addBtn = template.querySelector("#plusOne");
+    let restBtn = template.querySelector("#minusOne");
+    addBtn.setAttribute("productId", product.name);
+    restBtn.setAttribute("productId", product.name);
+    return template;
   }
 
-  displayProducts(){
-    this.__cartList.forEach(product =>{
-     let card= this.createProductCard(product)
-     this.cartContainer.appendChild(card)
-    })
+  displayProducts() {
+    this.cartContainer.innerHTML = "";
+    this.__cartList.forEach((product) => {
+      let card = this.createProductCard(product);
+      this.cartContainer.appendChild(card);
+    });
   }
   checkRepetition(product) {
     let productIndex = this.findProductIndex(product, this.__cartList);
     if (productIndex !== -1) {
-     this.manageProductUnits(productIndex)
-      return true
+      this.manageProductUnits(productIndex, "plusOne");
+      this.displayProducts();
+      return true;
     }
-    return false
+    return false;
   }
 
   addProduct(product, prodPrice) {
     if (this.checkRepetition(product)) return;
-    let productAdded = { name: product, units: 1, price: parseFloat(prodPrice), };
-    productAdded.totalPrice= this.multiplyValues(productAdded.price, productAdded.units);
+    let productAdded = {
+      name: product,
+      units: 1,
+      price: parseFloat(prodPrice),
+    };
+    productAdded.totalPrice = this.multiplyValues(
+      productAdded.price,
+      productAdded.units
+    );
     this.__cartList.push(productAdded);
     this.cartList;
-    this.displayProducts()
+    this.displayProducts();
   }
 }
 
