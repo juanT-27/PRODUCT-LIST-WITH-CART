@@ -20,7 +20,13 @@ class Cart {
   deleteProduct(indx) {
     this.__cartList.splice(indx, 1);
     this.cartList;
-    this.displayProducts()
+    this.displayProducts();
+  }
+
+  getCartTotalPrice() {
+    this.total = this.__cartList.reduce((accum, curr) => {
+      return accum + curr.totalPrice;
+    }, 0);
   }
 
   manageProductUnits(indx, action) {
@@ -36,7 +42,6 @@ class Cart {
   handleAddOrRestClicked(prodId, objClicked) {
     let prodIndx = this.findProductIndex(prodId, this.__cartList);
     this.manageProductUnits(prodIndx, objClicked);
-    console.log(product);
   }
 
   createProductCard(product) {
@@ -87,6 +92,7 @@ class Cart {
     this.__cartList.push(productAdded);
     this.cartList;
     this.displayProducts();
+    
   }
 }
 
