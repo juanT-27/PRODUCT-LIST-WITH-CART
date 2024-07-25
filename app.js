@@ -6,7 +6,26 @@ class Cart {
     this.__cartList = [];
   }
   get cartList() {
-    console.log(this.__cartList);
+   console.log(this.__cartList) ;
+  }
+
+  cartAppeareance(){
+    let emptyCart= document.querySelector(".emptyCart");
+    let order= document.querySelector(".orderTotal");
+    let cartTitle= document.querySelector("#cartTitle");
+    let totalOrder= order.querySelector("#total");
+    cartTitle.textContent= `Your cart (${this.__cartList.length}) `
+
+    if (this.__cartList.length>0){
+      emptyCart.style.display="none"
+      order.classList.remove("hidden")
+      totalOrder.textContent= `${this.total.toFixed(2)}`
+      }
+      else if(this.__cartList.length=== 0){
+        emptyCart.style.display="flex"
+        order.classList.add("hidden")
+        totalOrder.textContent= `${this.total}`
+      }
   }
 
   findProductIndex(prodId, arr) {
@@ -19,29 +38,29 @@ class Cart {
 
   deleteProduct(indx) {
     this.__cartList.splice(indx, 1);
-    this.cartList;
-    this.displayProducts();
+    this.uiDisplay()
   }
 
   getCartTotalPrice() {
     this.total = this.__cartList.reduce((accum, curr) => {
       return accum + curr.totalPrice;
     }, 0);
+    console.log(this.total)
   }
 
   manageProductUnits(indx, action) {
     let element = this.__cartList[indx];
     action === "plusOne" ? (element.units += 1) : (element.units -= 1);
     element.totalPrice = this.multiplyValues(element.price, element.units);
-    if (element.units === 0) this.deleteProduct();
-    this.cartList;
-    this.displayProducts();
+    if (element.units <= 0) this.deleteProduct();
+    this.uiDisplay()
     return element;
   }
 
   handleAddOrRestClicked(prodId, objClicked) {
     let prodIndx = this.findProductIndex(prodId, this.__cartList);
     this.manageProductUnits(prodIndx, objClicked);
+
   }
 
   createProductCard(product) {
@@ -72,7 +91,7 @@ class Cart {
     let productIndex = this.findProductIndex(product, this.__cartList);
     if (productIndex !== -1) {
       this.manageProductUnits(productIndex, "plusOne");
-      this.displayProducts();
+      this.uiDisplay()
       return true;
     }
     return false;
@@ -91,8 +110,13 @@ class Cart {
     );
     this.__cartList.push(productAdded);
     this.cartList;
+    this.uiDisplay()
+  }
+
+  uiDisplay(){
+    this.getCartTotalPrice();
+    this.cartAppeareance();
     this.displayProducts();
-    
   }
 }
 

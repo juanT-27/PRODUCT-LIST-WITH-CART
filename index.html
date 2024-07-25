@@ -21,15 +21,12 @@
       <section id="catalog">
         <template id="productTemplate">
           <div class="productCard">
-            <div class="productImg" >
-              <img
-                id="productImg"
-              />
+            <div class="productImg">
+              <img id="productImg" />
             </div>
+            <a class="btn toCartBtn" id="addBtn" href="#cartContainer">Add to cart</a>
+
             <div class="productInfo">
-          
-                <button class="toCartBtn "  id="addBtn" >Add to cart</button>
-           
               <p class="smallText" id="productCategory"></p>
               <h3 id="productName"></h3>
               <p id="productPrice" class=""></p>
@@ -39,26 +36,37 @@
       </section>
 
       <section class="cartContainer" id="cartContainer">
-        <h2>Your Cart </h2>
+        <h2 id="cartTitle">Your Cart (0)</h2>
+        <div class=" emptyCart ">
+          <div class="emptyImg"> <img src="/assets/images/illustration-empty-cart.svg" alt=""></div>
+          <p>Your added items will appear here</p>
+        </div>
         <div id="productsInCart">
           <template id="cartTemplate">
             <div class="cartProduct">
               <div class="unitsController">
                 <h3 id="title">Waffle</h3>
-                <button id="minusOne">-</button>
+                <button id="minusOne" class="btn">-</button>
                 <p id="units">1</p>
-                <button id="plusOne">+</button>
+                <button id="plusOne" class="btn">+</button>
               </div>
-              <p id="productPrice">Product price = 7.99</p>
-              <p id="totalPrice"> *2 = 15,18 </p>
+              <div class="prices">
+                <p id="productPrice">Product price = 7.99</p>
+                <p id="totalPrice">*2 = 15,18</p>
+              </div>
             </div>
           </template>
         </div>
-        
-        
+        <div class="orderTotal hidden">
+          <div class="text">
+            <p>Order Total</p> <h2 id="total"> 40 usd</h2>
+          </div>
+           <button class="btn">Confirm order</button>
+        </div>
+
       </section>
     </main>
 
-  <script src="app.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>
